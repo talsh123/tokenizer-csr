@@ -196,9 +196,9 @@ def flatten_csr(transitions, is_terminal, token_ids, prefix):
 
     # some prints
     total_edges = sum(count for _, count in row_ptr)
-    print(f"{prefix} trie CSR stats:\n")
+    print(f"{prefix} trie CSR stats:")
     print(f"total nodes: {len(row_ptr)}")
-    print(f"total edges: {total_edges}")
+    print(f"total edges: {total_edges}\n")
             
     return row_ptr, edges
 
@@ -234,14 +234,14 @@ def print_edge_stats(row_ptr):
     from collections import Counter
     dist = Counter(counts)
     
-    print(f"edge distribution:\n")
+    print(f"edge distribution:")
     print(f"total nodes: {len(row_ptr)}")
     print(f"max edges: {max_edges}")
     print(f"avg edges: {avg_edges:.2f}")
     print(f"nodes with 1 edge: {dist[1]}")
     print(f"nodes with 2 edges: {dist[2]}")
     print(f"nodes with > 10: {sum(v for k,v in dist.items() if k > 10)}")
-    print(f"nodes with > 50: {sum(v for k,v in dist.items() if k > 50)}")
+    print(f"nodes with > 50: {sum(v for k,v in dist.items() if k > 50)}\n")
 
 ##################### MAIN SECTION #####################
 
@@ -251,7 +251,7 @@ print(f"total vocabulary entries: {len(vocab)}")
 
 # step 2: builds the shared alphabet
 char_to_index = build_alphabet(vocab)
-print(f"alphabet size: {len(char_to_index)} unique characters")
+print(f"alphabet size: {len(char_to_index)} unique characters\n")
 
 # step 3: splits the vocabulary into root and continuation vocabularies
 root_vocab, cont_vocab = split_vocab(vocab)
@@ -261,7 +261,7 @@ root_transitions, root_is_terminal, root_token_ids = build_trie(root_vocab, char
 print(f"root trie nodes: {len(root_transitions)}")
 
 cont_transitions, cont_is_terminal, cont_token_ids = build_trie(cont_vocab, char_to_index)
-print(f"continuation trie nodes: {len(cont_transitions)}")
+print(f"continuation trie nodes: {len(cont_transitions)}\n")
 
 # step 5: compresses both tries using CSR and exports .mem files
 root_row_ptr, root_edges = flatten_csr(root_transitions, root_is_terminal, root_token_ids, "root")
