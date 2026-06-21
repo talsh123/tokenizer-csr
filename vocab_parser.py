@@ -185,14 +185,17 @@ def flatten_csr(transitions, is_terminal, token_ids, prefix):
                 f_term.write("00\n")
                 
     # export token IDs
+    # token_ids feed a 16-bit register (TOKEN_W=16) in trie_engine.v, and every BERT token ID
+    # fits in 16 bits (max 30521 < 65536), so each entry is written as exactly 4 hex digits.
+    # This matches the register width, avoiding the wider-than-register $readmemh truncation warning.
     with open(f'{prefix}_token_ids.mem', 'w') as f_ids:
         for tid in token_ids:
             if tid == -1: # -1 meaning no path exists, no token
-                f_ids.write("00000000\n")
+                f_ids.write("0000\n")
             else: # if a token is found
                 # X - format the integer as uppercase Hexadecimal
-                # 08 - pad with leading zeros so it is exactly 8 characters long
-                f_ids.write(f"{tid:08X}\n")
+                # 04 - pad with leading zeros so it is exactly 4 characters long (16 bits)
+                f_ids.write(f"{tid:04X}\n")
 
     # some prints
     total_edges = sum(count for _, count in row_ptr)
